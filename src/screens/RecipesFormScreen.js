@@ -1,10 +1,14 @@
-import { View,Text,TextInput,TouchableOpacity,Image,StyleSheet,} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {widthPercentageToDP as wp,heightPercentageToDP as hp,} from "react-native-responsive-screen";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 export default function RecipesFormScreen({ route, navigation }) {
   const { recipeToEdit, recipeIndex, onrecipeEdited } = route.params || {};
+
   const [title, setTitle] = useState(recipeToEdit ? recipeToEdit.title : "");
   const [image, setImage] = useState(recipeToEdit ? recipeToEdit.image : "");
   const [description, setDescription] = useState(
@@ -12,7 +16,46 @@ export default function RecipesFormScreen({ route, navigation }) {
   );
 
   const saverecipe = async () => {
- 
+    if (!title.trim() || !image.trim() || !description.trim()) {
+      // You could add an alert here in a real app
+      console.warn("Please fill in all fields");
+      return;
+    }
+
+    try {
+      // Create the new/updated recipe object
+      const newRecipe = {
+        title: title.trim(),
+        image: image.trim(),
+        description: description.trim(),
+        // You can add createdAt or id if needed in the future
+      };
+
+      // Get existing recipes from AsyncStorage
+      const existingRecipesJson = await AsyncStorage.getItem("customrecipes");
+      let recipes = existingRecipesJson ? JSON.parse(existingRecipesJson) : [];
+
+      if (recipeToEdit && typeof recipeIndex === "number") {
+        // Editing an existing recipe
+        recipes[recipeIndex] = newRecipe;
+        // Optional: call callback if provided (useful if parent needs to refresh)
+        if (onrecipeEdited) {
+          onrecipeEdited();
+        }
+      } else {
+        // Adding a new recipe
+        recipes.push(newRecipe);
+      }
+
+      // Save updated list back to AsyncStorage
+      await AsyncStorage.setItem("customrecipes", JSON.stringify(recipes));
+
+      // Navigate back after successful save
+      navigation.goBack();
+    } catch (error) {
+      console.error("Error saving recipe:", error);
+      // In a real app, show an alert to the user
+    }
   };
 
   return (
@@ -58,33 +101,40 @@ const styles = StyleSheet.create({
     marginTop: hp(4),
     borderWidth: 1,
     borderColor: "#ddd",
-    padding: wp(.5),
+    padding: wp(3),
     marginVertical: hp(1),
+    borderRadius: 8,
+    fontSize: hp(2),
   },
   image: {
-    width: 300,
-    height:200,
-    margin: wp(2),
+    width: "100%",
+    height: hp(30),
+    marginVertical: hp(2),
+    borderRadius: 12,
+    resizeMode: "cover",
   },
   imagePlaceholder: {
     height: hp(20),
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: hp(1),
+    marginVertical: hp(2),
     borderWidth: 1,
     borderColor: "#ddd",
+    borderRadius: 12,
     textAlign: "center",
-    padding: wp(2),
+    fontSize: hp(2),
+    color: "#888",
   },
   saveButton: {
     backgroundColor: "#4F75FF",
-    padding: wp(.5),
+    padding: hp(2),
     alignItems: "center",
-    borderRadius: 5,
-    marginTop: hp(2),
+    borderRadius: 8,
+    marginTop: hp(3),
   },
   saveButtonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: hp(2.2),
   },
 });
