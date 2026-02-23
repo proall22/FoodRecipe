@@ -7,41 +7,39 @@ import {
 } from "react-native-responsive-screen";
 import Categories from "../components/categories";
 import FoodItems from "../components/recipes";
-
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState("Chicken");
-
   // Hardcoded categories for news
   const [categories, setCategories] = useState([
     {
       idCategory: "1",
       strCategory: "Beef",
       strCategoryThumb: "https://www.themealdb.com/images/category/beef.png",
-      
+    
       },
     {
       idCategory: "2",
       strCategory: "Chicken",
       strCategoryThumb: "https://www.themealdb.com/images/category/chicken.png",
-     
+   
     },
     {
       idCategory: "3",
       strCategory: "Dessert",
       strCategoryThumb: "https://www.themealdb.com/images/category/dessert.png",
-      
+    
     },
     {
       idCategory: "4",
       strCategory: "Lamb",
       strCategoryThumb: "https://www.themealdb.com/images/category/lamb.png",
-      
+    
     },
     {
       idCategory: "5",
       strCategory: "Miscellaneous",
       strCategoryThumb: "https://www.themealdb.com/images/category/miscellaneous.png",
-      
+    
       },
       {
         idCategory: "6",
@@ -88,9 +86,8 @@ export default function HomeScreen() {
         strCategory: "Goat",
         strCategoryThumb: "https://images.unsplash.com/photo-1619711667542-c049700dd9e0?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
-      
+    
   ]);
-
   // Keep all foods in state (unfiltered list)
   const [allFood, setAllFood] = useState([
     {
@@ -168,8 +165,7 @@ export default function HomeScreen() {
           measure: "pinch"
         }
       ],
-       
-
+     
     },
     {
       category:'Beef',
@@ -290,7 +286,6 @@ export default function HomeScreen() {
           measure: "3 sprigs"
         }
       ],
-
     },
     {
       idCategory: "1",
@@ -355,7 +350,6 @@ export default function HomeScreen() {
           measure: "pinch"
         }
       ],
-
     },
     {
       idFood:'5',
@@ -411,8 +405,8 @@ export default function HomeScreen() {
           ingredientName: "Pepper",
           measure: "pinch"
         }
-      ],       
-        
+      ],
+      
     },
     {
       idFood:'6',
@@ -469,8 +463,8 @@ export default function HomeScreen() {
           measure: "6 small"
         }
       ],
+    
       
-        
     },
     {
       idCategory: "2",
@@ -513,7 +507,6 @@ export default function HomeScreen() {
       recipeInstructions:"To make Chicken Alfredo, season 2 boneless, skinless chicken breasts with salt and pepper, then cook in a large skillet with 2 tablespoons of olive oil over medium heat until golden and cooked through, about 6-7 minutes per side. Remove the chicken, slice it, and set aside. In the same pan, melt 2 tablespoons of butter, add 3 minced garlic cloves, and sauté for 1 minute. Stir in 1 cup of heavy cream and bring to a simmer, then add 1 cup of grated Parmesan cheese, stirring until the sauce is smooth and thickened. Cook 300g of fettuccine pasta according to package instructions, drain, and toss it with the Alfredo sauce. Add the sliced chicken on top and garnish with parsley before serving.",
       category:'Chicken',
       recipeName: "Chicken Alfredo",
-
       recipeImage: "https://images.unsplash.com/photo-1645112411341-6c4fd023714a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       recipeId: "chicken_02",
       recipeCategory: "Chicken",
@@ -694,16 +687,13 @@ export default function HomeScreen() {
       ],
     },
   ]);
-
   const handleChangeCategory = (category) => {
     setActiveCategory(category);
   };
-
   // Filter foods by active category during rendering
   const filteredfoods = allFood.filter(
     (food) => food.category === activeCategory
   );
-
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
@@ -719,33 +709,22 @@ export default function HomeScreen() {
           />
           <Text style={styles.greetingText}>Hello, User!</Text>
         </View>
-
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Make your own food,</Text>
           <Text style={styles.subtitle}>
             stay at <Text style={styles.highlight}>home</Text>
           </Text>
         </View>
-
         <View testID="categoryList">
-          <Categories 
-            categories={categories}
-            activeCategory={activeCategory}
-            handleChangeCategory={handleChangeCategory}
-          />
+          <Categories categories={categories} activeCategory={activeCategory} handleChangeCategory={handleChangeCategory} />
         </View>
-
         <View testID="foodList">
-          <FoodItems 
-            foods={filteredfoods}
-            categories={categories}
-          />
+          <FoodItems foods={filteredfoods} categories={categories} />
         </View>
       </ScrollView>
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
