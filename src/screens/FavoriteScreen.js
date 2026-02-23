@@ -13,18 +13,15 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-
 export default function FavoriteScreen() {
   const navigation = useNavigation();
-
   // Assuming you have a similar structure for recipes in your Redux store
   const favoriteRecipes = useSelector((state) => state.favorites);
   const favoriteRecipesList = favoriteRecipes?.favoriterecipes || [];
   console.log(favoriteRecipes.favoriterecipes);
   console.log('favoriteRecipesList',favoriteRecipesList);
-  
-  
-
+ 
+ 
   if (favoriteRecipesList.length === 0) {
     return (
       <View style={styles.emptyContainer}>
@@ -46,14 +43,12 @@ export default function FavoriteScreen() {
       </View>
     );
   }
-
   return (
     <>
       {/* Heading */}
       <View testID="FavoriteRecipes">
         <Text
-          style={{ fontSize: hp(3.8), marginTop: hp(4), marginLeft: 20 }}
-          className="font-semibold text-neutral-600"
+          style={{ fontSize: hp(3.8), marginTop: hp(4), marginLeft: 20, fontWeight: "600", color: "#52525B" }}
         >
           My Favorite Recipes
         </Text>
@@ -73,11 +68,28 @@ export default function FavoriteScreen() {
       >
         <Text style={{ color: "#fff" }}>Go back</Text>
       </TouchableOpacity>
-    
+      <FlatList
+        data={favoriteRecipesList}
+        contentContainerStyle={styles.listContentContainer}
+        keyExtractor={(item) => String(item.idFood)}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.cardContainer}
+            onPress={() => navigation.navigate("RecipeDetail", { ...item })}
+          >
+            <Image
+              source={{ uri: item.recipeImage }}
+              style={styles.recipeImage}
+            />
+            <Text style={styles.recipeTitle}>
+              {item.recipeName.length > 20 ? item.recipeName.slice(0, 20) + "..." : item.recipeName}
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
     </>
   );
 }
-
 const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
